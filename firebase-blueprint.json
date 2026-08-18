@@ -1,0 +1,35 @@
+{
+  "entities": {
+    "Ticket": {
+      "title": "Ticket",
+      "description": "Issued dummy flight tickets for verification",
+      "type": "object",
+      "properties": {
+        "bookingReference": { "type": "string" },
+        "ticketNumber": { "type": "string" },
+        "status": { "type": "string" },
+        "issueDate": { "type": "string" },
+        "tripType": { "type": "string" },
+        "passengers": { "type": "number" },
+        "firstName": { "type": "string" },
+        "lastName": { "type": "string" },
+        "passport": { "type": "string" },
+        "email": { "type": "string" },
+        "totalPrice": { "type": "string" },
+        "flightDetails": { "type": "object" },
+        "createdAt": { "type": "string" },
+        "expiryDate": { "type": "string" },
+        "expiresAt": { "type": "string" },
+        "validityDays": { "type": "number" }
+      },
+      "required": ["bookingReference", "lastName"]
+    }
+  },
+  "securityRules": [
+    {
+      "collection": "tickets",
+      "read": true,
+      "write": true
+    }
+  ]
+}

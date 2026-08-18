@@ -1,0 +1,8 @@
+{
+  "name": "Remix Skydummy-Flight Route Added",
+  "description": "Imported from GitHub: Mustapha-Iddrisu/Skydummy-Selar",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
