@@ -23,7 +23,7 @@ const useBookingStore = create(
       lastName: '',
       passport: '',
       email: '',
-      paymentMethod: 'credit',
+      paymentMethod: 'selar',
       
       // Flight data & Route Selection
       availableRoutes: [],

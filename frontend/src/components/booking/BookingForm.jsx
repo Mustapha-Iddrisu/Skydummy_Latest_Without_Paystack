@@ -25,8 +25,10 @@ import useBookingStore from '../../store/bookingStore';
 import TripDetails from './TripDetails';
 import PassengerDetails from './PassengerDetails';
 import PaymentMethod from './PaymentMethod';
+import PaymentRedirectModal from './PaymentRedirectModal';
 import { validateCoupon } from '../../utils/coupons';
 import { deepCleanObject } from '../../services/firebaseService';
+import { getSelarProductUrl } from '../../utils/selarLinks';
 
 
 const BookingForm = () => {
@@ -35,11 +37,20 @@ const BookingForm = () => {
   const [discountAmount, setDiscountAmount] = useState(0);
   const [couponCode, setCouponCode] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [paymentMethod, setPaymentMethod] = useState('card');
+  const [paymentMethod, setPaymentMethod] = useState('selar');
   
   const [routeError, setRouteError] = useState(false);
   const [validationPrompt, setValidationPrompt] = useState(null);
   const [alertModalData, setAlertModalData] = useState({ isOpen: false, sections: [], totalCount: 0 });
+  const [selarRedirectModal, setSelarRedirectModal] = useState({
+    isOpen: false,
+    checkoutUrl: '',
+    pnr: '',
+    amount: 0,
+    tripType: 'round',
+    passengers: 1,
+    isConfigured: true
+  });
   
   const { 
     updateField, 
@@ -67,7 +78,7 @@ const BookingForm = () => {
       lastName: formData.lastName || '',
       passport: formData.passport || '',
       email: formData.email || '',
-      paymentMethod: formData.paymentMethod || 'card',
+      paymentMethod: formData.paymentMethod || 'selar',
       couponCode: '',
       passengerList: formData.passengerList || [{ firstName: '', lastName: '', passport: '' }]
     }
@@ -186,9 +197,9 @@ const BookingForm = () => {
     return () => subscription.unsubscribe();
   }, [watch, updateField]);
 
-  // PROCESS THE FORM - Immediate navigation
+  // PROCESS THE FORM - Selar Checkout Integration
   const processForm = async (rawInputData) => {
-    console.log('📝 Processing form...');
+    console.log('📝 Processing form for Selar payment...');
     const data = deepCleanObject(rawInputData) || rawInputData || {};
     
     setIsSubmitting(true);
@@ -224,36 +235,76 @@ const BookingForm = () => {
         };
       });
 
+      const pnr = `REF${Math.random().toString(36).substring(2, 8).toUpperCase()}`;
+      const finalAmountUSD = getFinalPriceUSD();
+
       // Prepare ticket data
       const ticketData = {
         ...data,
+        bookingReference: pnr,
         tripType: data.tripType || 'oneway',
         isAdmin: isAdminCoupon,
         couponApplied: isCouponApplied,
         couponCode: couponCode,
         discountAmount: discountAmount,
-        finalPrice: getFinalPriceUSD(),
+        finalPrice: finalAmountUSD,
         originalPrice: totalPriceUSD,
         finalPriceGHS: getFinalPriceGHS(),
         flightDetails: flightDetails,
-        paymentMethod: data.paymentMethod || 'card',
-        paymentStatus: isAdminCoupon ? 'free' : 'paid',
+        paymentMethod: 'selar',
+        paymentStatus: isAdminCoupon ? 'free' : 'pending_payment',
         passengerList: passengerList,
         passengerDetails: passengerDetails,
         passengerCount: data.passengers || 1
       };
-      
-      generateTicket(ticketData);
-      navigate('/ticket');
+
+      // If admin free coupon is used, bypass payment gateway directly
+      if (isAdminCoupon || finalAmountUSD === 0) {
+        generateTicket(ticketData);
+        navigate('/ticket');
+        return;
+      }
+
+      // Save pending ticket state locally so callback can reliably retrieve it
+      try {
+        localStorage.setItem('sky_pending_payment_ticket', JSON.stringify(ticketData));
+      } catch (e) {
+        console.warn('Could not save pending ticket to localStorage', e);
+      }
+
+      // Generate the exact Selar hosted product URL based strictly on tripType & passenger count with query parameters
+      const customerFullName = `${data.firstName || ''} ${data.lastName || ''}`.trim() || 'Valued Customer';
+      const selarResult = getSelarProductUrl({
+        tripType: data.tripType || 'round',
+        passengers: data.passengers || 1,
+        email: data.email || '',
+        name: customerFullName,
+        pnr: pnr
+      });
+
+      console.log(`Resolved Selar product for [${selarResult.tripType}] x ${selarResult.passengers} passenger(s):`, selarResult.url || 'Not configured');
+
+      // Open the Selar redirect modal corresponding to this exact trip type and passenger selection
+      setSelarRedirectModal({
+        isOpen: true,
+        checkoutUrl: selarResult.url,
+        pnr,
+        amount: finalAmountUSD,
+        tripType: selarResult.tripType,
+        passengers: selarResult.passengers,
+        isConfigured: selarResult.isConfigured
+      });
     
-  } catch (error) {
-    console.error('❌ Error:', error);
-    alert('There was an error generating your ticket. Please try again.');
-  } finally {
-    setIsSubmitting(false);
-    setLoading(false);
-  }
-};
+    } catch (error) {
+      console.error('❌ Error processing payment checkout:', error);
+      alert('There was an issue initiating your payment. Generating your ticket preview directly.');
+      generateTicket(rawInputData);
+      navigate('/ticket');
+    } finally {
+      setIsSubmitting(false);
+      setLoading(false);
+    }
+  };
 
   // Trigger the outright validation alert prompt and highlight errors
   const triggerValidationAlert = (customSections = [], additionalCount = 0) => {
@@ -720,6 +771,18 @@ const BookingForm = () => {
           </div>
         </div>
       )}
+
+      {/* Selar External Checkout Modal to bypass iframe embed blocks */}
+      <PaymentRedirectModal
+        isOpen={selarRedirectModal.isOpen}
+        onClose={() => setSelarRedirectModal(prev => ({ ...prev, isOpen: false }))}
+        checkoutUrl={selarRedirectModal.checkoutUrl}
+        pnr={selarRedirectModal.pnr}
+        amount={selarRedirectModal.amount}
+        tripType={selarRedirectModal.tripType}
+        passengers={selarRedirectModal.passengers}
+        isConfigured={selarRedirectModal.isConfigured}
+      />
     </>
   );
 };

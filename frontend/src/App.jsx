@@ -9,6 +9,7 @@ import './App.css';
 const HomePage = lazy(() => import('./pages/HomePage'));
 const TicketPage = lazy(() => import('./pages/TicketPage'));
 const PnrVerificationPage = lazy(() => import('./pages/PnrVerificationPage'));
+const PaymentCallbackPage = lazy(() => import('./pages/PaymentCallbackPage'));
 const PrivacyPolicy = lazy(() => import('./pages/PrivacyPolicy'));
 const TermsConditions = lazy(() => import('./pages/TermsConditions'));
 const RefundPolicy = lazy(() => import('./pages/RefundPolicy'));
@@ -32,6 +33,7 @@ function App() {
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/ticket" element={<TicketPage />} />
+            <Route path="/payment/callback" element={<PaymentCallbackPage />} />
             <Route path="/verify" element={<PnrVerificationPage />} />
             <Route path="/privacy-policy" element={<PrivacyPolicy />} />
             <Route path="/terms-conditions" element={<TermsConditions />} />

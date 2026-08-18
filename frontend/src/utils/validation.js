@@ -31,6 +31,6 @@ export const bookingSchema = yup.object().shape({
   lastName: yup.string().optional(),
   passport: yup.string().optional(),
   email: yup.string().email('Invalid email format').required('Email is required'),
-  paymentMethod: yup.string().oneOf(['card', 'mobile_money']).required(),
+  paymentMethod: yup.string().oneOf(['selar', 'card', 'mobile_money', 'bank_transfer']).required(),
   couponCode: yup.string().optional()
 });

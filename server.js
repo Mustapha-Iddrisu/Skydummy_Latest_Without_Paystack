@@ -5,6 +5,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import { createServer as createViteServer } from 'vite';
 import ticketsRoutes from './backend/routes/tickets.js';
+import selarRoutes from './backend/routes/selar.js';
 
 dotenv.config();
 
@@ -24,6 +25,7 @@ async function startServer() {
 
   // API Routes
   app.use('/api/tickets', ticketsRoutes);
+  app.use('/api/selar', selarRoutes);
   
   // ✅ Log all incoming requests (helpful for debugging)
   app.use((req, res, next) => {
