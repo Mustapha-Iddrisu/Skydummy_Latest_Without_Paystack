@@ -8,13 +8,13 @@ import {
   Loader2, 
   MousePointer, 
   Ticket, 
-  Info, 
   ArrowRightLeft, 
   Armchair, 
   CheckCircle, 
   Plus, 
   AlertTriangle, 
-  AlertCircle 
+  AlertCircle,
+  Clock
 } from 'lucide-react';
 
 const RouteSelection = ({
@@ -49,32 +49,32 @@ const RouteSelection = ({
       const hrs = Math.floor(flight.stopoverDetails.duration / 60);
       const mins = flight.stopoverDetails.duration % 60;
       const durationStr = hrs > 0 ? `${hrs}h ${mins}m` : `${mins}m`;
-      return `Transit Stop: ${flight.stopoverDetails.city}, ${flight.stopoverDetails.country} (${flight.stopoverDetails.airport}) — Layover: ${durationStr}`;
+      return `Layover: ${flight.stopoverDetails.airport || flight.stopoverDetails.city} • ${durationStr}`;
     }
-    return `Transit: Direct Non-stop flight from ${flight.departure?.city || flight.departure?.airport} to ${flight.arrival?.city || flight.arrival?.airport}`;
+    return `Non-stop direct flight`;
   };
 
   return (
     <div className={`route-selection-wrapper ${hasError ? 'route-selection-error' : ''}`} id="route-selection-section">
       <div className="section-title">
-        <RouteIcon size={18} /> <span>Select Flight Route</span>
-        <span className="route-badge">World Flight Data</span>
+        <RouteIcon size={16} /> <span>Select Flight Route</span>
+        <span className="route-badge">Verified Flights</span>
       </div>
 
       {!isFormReady ? (
         <div className="route-prompt-card">
-          <PlaneTakeoff size={36} className="prompt-icon" color="#2a7de1" />
-          <p>Please select your <strong>Departure Airport</strong>, <strong>Destination Airport</strong>, and <strong>Date(s)</strong> above to view available routes.</p>
+          <PlaneTakeoff size={28} className="prompt-icon" color="#2a7de1" />
+          <p>Select your <strong>Departure</strong>, <strong>Destination</strong>, and <strong>Date</strong> above to load live route options.</p>
         </div>
       ) : isLoadingRoutes ? (
         <div className="route-loading-card">
-          <Loader2 size={32} className="animate-spin loading-icon" color="#2a7de1" />
-          <p>Searching world flight database for <strong>{departure} ➔ {destination}</strong>...</p>
+          <Loader2 size={24} className="animate-spin loading-icon" color="#2a7de1" />
+          <p>Searching flights for <strong>{departure} ➔ {destination}</strong>...</p>
         </div>
       ) : availableRoutes && availableRoutes.length > 0 ? (
         <div className="route-options-container">
-          <p className="route-instructions" style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-            <MousePointer size={14} /> <span>Select one of the {availableRoutes.length} available flight routes below (hover over any route to inspect transit/stop details):</span>
+          <p className="route-instructions">
+            <MousePointer size={13} /> <span>Choose one of the {availableRoutes.length} available flight schedule options:</span>
           </p>
 
           <div className="route-cards-list">
@@ -92,110 +92,124 @@ const RouteSelection = ({
                   className={`route-card ${isSelected ? 'selected' : ''}`}
                   onClick={() => onSelectRoute(route)}
                 >
+                  {/* Top Bar: Airline info & Flight number */}
                   <div className="route-card-header">
                     <div className="airline-info">
-                      <span className="airline-code-badge">{depFlight.airline.code}</span>
+                      <span className="airline-code-badge">{depFlight.airline?.code || 'FL'}</span>
                       <div className="airline-meta">
-                        <span className="airline-name">{depFlight.airline.name}</span>
-                        <span className="alliance-tag">{depFlight.airline.alliance}</span>
+                        <span className="airline-name">{depFlight.airline?.name || 'Commercial Airline'}</span>
+                        {depFlight.airline?.alliance && (
+                          <span className="alliance-tag hide-on-mobile">{depFlight.airline.alliance}</span>
+                        )}
                       </div>
                     </div>
-                    <div className="flight-number-tag" style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-                      <Ticket size={13} /> <span>{depFlight.flightNumber}</span>
+                    
+                    <div className="flight-number-tag">
+                      <Ticket size={12} /> <span>{depFlight.flightNumber}</span>
                     </div>
                   </div>
 
                   {/* Outbound Segment */}
                   <div className="route-segment">
-                    <div className="segment-label" style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                      <PlaneTakeoff size={14} /> <span>Outbound ({formatDate(depFlight.departure.time)})</span>
+                    <div className="segment-label">
+                      <PlaneTakeoff size={12} color="#2563eb" /> 
+                      <span>Outbound • {formatDate(depFlight.departure?.time)}</span>
                     </div>
+
                     <div className="segment-details">
                       <div className="time-block">
-                        <span className="time">{formatTime(depFlight.departure.time)}</span>
-                        <span className="airport">{depFlight.departure.airport}</span>
+                        <span className="time">{formatTime(depFlight.departure?.time)}</span>
+                        <span className="airport">{depFlight.departure?.airport}</span>
                       </div>
 
-                      <div className="flight-path" title={depTransitText}>
-                        <span className="duration">{depFlight.durationFormatted}</span>
+                      <div className="flight-path">
+                        <span className="duration">
+                          <Clock size={10} /> {depFlight.durationFormatted}
+                        </span>
                         <div className="path-line">
                           <span className="dot"></span>
                           <span className="line"></span>
-                          <Plane size={14} className="plane-icon" />
+                          <Plane size={11} className="plane-icon" />
                           <span className="line"></span>
                           <span className="dot"></span>
                         </div>
-                        <div className="stops-badge-container">
-                          <span className={`stops-badge ${depFlight.stops === 0 ? 'direct' : 'connecting'}`}>
-                            {depFlight.stops === 0 ? 'Direct Flight' : `${depFlight.stops} Stop (${depFlight.stopoverDetails?.airport || 'Hub'})`}
-                          </span>
-                          <div className="transit-tooltip">
-                            <Info size={12} /> {depTransitText}
-                          </div>
-                        </div>
+                        <span className={`stops-badge ${depFlight.stops === 0 ? 'direct' : 'connecting'}`}>
+                          {depFlight.stops === 0 ? 'Direct' : `${depFlight.stops} Stop (${depFlight.stopoverDetails?.airport || 'Hub'})`}
+                        </span>
                       </div>
 
                       <div className="time-block right">
-                        <span className="time">{formatTime(depFlight.arrival.time)}</span>
-                        <span className="airport">{depFlight.arrival.airport}</span>
+                        <span className="time">{formatTime(depFlight.arrival?.time)}</span>
+                        <span className="airport">{depFlight.arrival?.airport}</span>
                       </div>
                     </div>
 
-                    {/* Transit Detail Strip on Hover */}
-                    <div className="transit-info-strip">
-                      <ArrowRightLeft size={13} /> <span>{depTransitText}</span>
-                    </div>
+                    {/* Transit Info Strip - Direct is hidden on mobile to conserve space */}
+                    {depFlight.stops > 0 ? (
+                      <div className="transit-info-strip">
+                        <ArrowRightLeft size={11} /> <span>{depTransitText}</span>
+                      </div>
+                    ) : (
+                      <div className="transit-info-strip transit-strip-direct hide-on-mobile">
+                        <ArrowRightLeft size={11} /> <span>{depTransitText}</span>
+                      </div>
+                    )}
                   </div>
 
                   {/* Return Segment if Round Trip */}
                   {tripType === 'round' && retFlight && (
                     <div className="route-segment return-segment">
-                      <div className="segment-label" style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                        <PlaneLanding size={14} /> <span>Return ({formatDate(retFlight.departure.time)})</span>
+                      <div className="segment-label">
+                        <PlaneLanding size={12} color="#059669" /> 
+                        <span>Return • {formatDate(retFlight.departure?.time)}</span>
                       </div>
+
                       <div className="segment-details">
                         <div className="time-block">
-                          <span className="time">{formatTime(retFlight.departure.time)}</span>
-                          <span className="airport">{retFlight.departure.airport}</span>
+                          <span className="time">{formatTime(retFlight.departure?.time)}</span>
+                          <span className="airport">{retFlight.departure?.airport}</span>
                         </div>
 
-                        <div className="flight-path" title={retTransitText}>
-                          <span className="duration">{retFlight.durationFormatted}</span>
+                        <div className="flight-path">
+                          <span className="duration">
+                            <Clock size={10} /> {retFlight.durationFormatted}
+                          </span>
                           <div className="path-line">
                             <span className="dot"></span>
                             <span className="line"></span>
-                            <Plane size={14} className="plane-icon reverse" />
+                            <Plane size={11} className="plane-icon reverse" />
                             <span className="line"></span>
                             <span className="dot"></span>
                           </div>
-                          <div className="stops-badge-container">
-                            <span className={`stops-badge ${retFlight.stops === 0 ? 'direct' : 'connecting'}`}>
-                              {retFlight.stops === 0 ? 'Direct Flight' : `${retFlight.stops} Stop (${retFlight.stopoverDetails?.airport || 'Hub'})`}
-                            </span>
-                            <div className="transit-tooltip">
-                              <Info size={12} /> {retTransitText}
-                            </div>
-                          </div>
+                          <span className={`stops-badge ${retFlight.stops === 0 ? 'direct' : 'connecting'}`}>
+                            {retFlight.stops === 0 ? 'Direct' : `${retFlight.stops} Stop (${retFlight.stopoverDetails?.airport || 'Hub'})`}
+                          </span>
                         </div>
 
                         <div className="time-block right">
-                          <span className="time">{formatTime(retFlight.arrival.time)}</span>
-                          <span className="airport">{retFlight.arrival.airport}</span>
+                          <span className="time">{formatTime(retFlight.arrival?.time)}</span>
+                          <span className="airport">{retFlight.arrival?.airport}</span>
                         </div>
                       </div>
 
-                      {/* Transit Detail Strip on Hover */}
-                      <div className="transit-info-strip">
-                        <ArrowRightLeft size={13} /> <span>{retTransitText}</span>
-                      </div>
+                      {/* Transit Info Strip - Direct is hidden on mobile to conserve space */}
+                      {retFlight.stops > 0 ? (
+                        <div className="transit-info-strip">
+                          <ArrowRightLeft size={11} /> <span>{retTransitText}</span>
+                        </div>
+                      ) : (
+                        <div className="transit-info-strip transit-strip-direct hide-on-mobile">
+                          <ArrowRightLeft size={11} /> <span>{retTransitText}</span>
+                        </div>
+                      )}
                     </div>
                   )}
 
                   {/* Route Card Footer */}
                   <div className="route-card-footer">
-                    <div className="aircraft-info" style={{ display: 'flex', gap: '12px' }}>
-                      <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}><Plane size={13} /> {depFlight.aircraft}</span>
-                      <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}><Armchair size={13} /> {depFlight.bookingClass}</span>
+                    <div className="aircraft-info">
+                      <span className="aircraft-model hide-on-mobile"><Plane size={11} /> {depFlight.aircraft || 'Commercial Jet'}</span>
+                      <span><Armchair size={11} /> {depFlight.bookingClass || 'Economy'}</span>
                     </div>
 
                     <button
@@ -208,11 +222,11 @@ const RouteSelection = ({
                     >
                       {isSelected ? (
                         <>
-                          <CheckCircle size={14} /> <span>Selected</span>
+                          <CheckCircle size={13} /> <span>Selected</span>
                         </>
                       ) : (
                         <>
-                          <Plus size={14} /> <span>Select Route</span>
+                          <Plus size={13} /> <span>Select</span>
                         </>
                       )}
                     </button>
@@ -224,14 +238,14 @@ const RouteSelection = ({
         </div>
       ) : (
         <div className="route-prompt-card">
-          <AlertTriangle size={36} className="warning-icon" color="#e67e22" />
-          <p>No available routes found for the selected airport pair. Try picking major international airports.</p>
+          <AlertTriangle size={28} className="warning-icon" color="#e67e22" />
+          <p>No direct routes found for this airport combination. Please try major international hubs.</p>
         </div>
       )}
 
       {hasError && (
-        <div className="route-error-msg" style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-          <AlertCircle size={15} /> <span>Please select one of the flight routes above to proceed with your ticket booking.</span>
+        <div className="route-error-msg">
+          <AlertCircle size={14} /> <span>Please select one of the flight routes above to proceed.</span>
         </div>
       )}
     </div>
@@ -239,4 +253,3 @@ const RouteSelection = ({
 };
 
 export default RouteSelection;
-

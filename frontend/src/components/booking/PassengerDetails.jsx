@@ -3,10 +3,9 @@ import React from 'react';
 import { 
   User, 
   Contact, 
-  Info, 
   Mail, 
-  Calendar, 
-  AlertCircle 
+  AlertCircle,
+  Users
 } from 'lucide-react';
 
 const PassengerDetails = ({ register, errors, watch, setValue, passengers = 1 }) => {
@@ -19,85 +18,45 @@ const PassengerDetails = ({ register, errors, watch, setValue, passengers = 1 })
     for (let i = 0; i < passengers; i++) {
       const passengerNumber = i + 1;
       fields.push(
-        <div key={i} className="passenger-group" style={{
-          border: '1px solid #e2eaf0',
-          borderRadius: '12px',
-          padding: '16px',
-          marginBottom: '12px',
-          background: i % 2 === 0 ? '#f9fcff' : 'white'
-        }}>
-          <div style={{ 
-            display: 'flex', 
-            justifyContent: 'space-between', 
-            alignItems: 'center',
-            marginBottom: '10px'
-          }}>
-            <h4 style={{ 
-              margin: 0, 
-              color: '#0b2b40',
-              fontSize: '0.95rem',
-              fontWeight: 600,
-              display: 'flex',
-              alignItems: 'center',
-              gap: '6px'
-            }}>
-              <User size={16} color="#2a7de1" />
-              <span>Passenger {passengerNumber}</span>
+        <div key={i} className="passenger-card-item">
+          <div className="passenger-card-header">
+            <h4 className="passenger-card-title">
+              <User size={16} color="#2563eb" />
+              <span>Passenger {passengerNumber} {passengerNumber === 1 ? '(Lead Passenger)' : ''}</span>
             </h4>
-            <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
-              {/* Age Category Selection */}
-              <label style={{ 
-                fontSize: '0.8rem', 
-                display: 'flex', 
-                alignItems: 'center', 
-                gap: '4px',
-                cursor: 'pointer'
-              }}>
+            <div className="passenger-type-selector">
+              <label className="type-radio-label">
                 <input
                   type="radio"
                   {...register(`passengerList.${i}.type`)}
                   value="adult"
                   defaultChecked={!passengerList[i]?.type || passengerList[i]?.type === 'adult'}
                 />
-                Adult
+                <span>Adult (12+ yrs)</span>
               </label>
-              <label style={{ 
-                fontSize: '0.8rem', 
-                display: 'flex', 
-                alignItems: 'center', 
-                gap: '4px',
-                cursor: 'pointer'
-              }}>
+              <label className="type-radio-label">
                 <input
                   type="radio"
                   {...register(`passengerList.${i}.type`)}
                   value="child"
                 />
-                Child
+                <span>Child (2-11 yrs)</span>
               </label>
             </div>
           </div>
           
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
+          <div className="passenger-inputs-row">
             <div className="field-group">
-              <label style={{ fontSize: '0.85rem', fontWeight: 500, color: '#1f3a4b', display: 'flex', alignItems: 'center', gap: '4px' }}>
+              <label className="input-field-label">
                 <User size={13} /> <span>First Name *</span>
               </label>
               <input
                 id={`passenger-${i}-firstName`}
                 type="text"
                 {...register(`passengerList.${i}.firstName`)}
-                placeholder="First name"
-                className={errors?.passengerList?.[i]?.firstName ? 'has-error' : ''}
-                style={{
-                  width: '100%',
-                  padding: '0.7rem 1rem',
-                  border: errors?.passengerList?.[i]?.firstName ? '2px solid #e74c3c' : '2px solid rgba(0,0,0,0.08)',
-                  borderRadius: '14px',
-                  fontSize: '0.95rem',
-                  background: errors?.passengerList?.[i]?.firstName ? '#fff5f5' : 'rgba(249,252,255,0.8)',
-                  transition: '0.2s'
-                }}
+                placeholder="e.g. John"
+                className={`text-input-field ${errors?.passengerList?.[i]?.firstName ? 'has-error' : ''}`}
+                autoComplete="given-name"
               />
               {errors?.passengerList?.[i]?.firstName && (
                 <span className="error-message"><AlertCircle size={13} /> {errors.passengerList[i].firstName.message}</span>
@@ -105,24 +64,16 @@ const PassengerDetails = ({ register, errors, watch, setValue, passengers = 1 })
             </div>
             
             <div className="field-group">
-              <label style={{ fontSize: '0.85rem', fontWeight: 500, color: '#1f3a4b', display: 'flex', alignItems: 'center', gap: '4px' }}>
+              <label className="input-field-label">
                 <User size={13} /> <span>Last Name *</span>
               </label>
               <input
                 id={`passenger-${i}-lastName`}
                 type="text"
                 {...register(`passengerList.${i}.lastName`)}
-                placeholder="Last name"
-                className={errors?.passengerList?.[i]?.lastName ? 'has-error' : ''}
-                style={{
-                  width: '100%',
-                  padding: '0.7rem 1rem',
-                  border: errors?.passengerList?.[i]?.lastName ? '2px solid #e74c3c' : '2px solid rgba(0,0,0,0.08)',
-                  borderRadius: '14px',
-                  fontSize: '0.95rem',
-                  background: errors?.passengerList?.[i]?.lastName ? '#fff5f5' : 'rgba(249,252,255,0.8)',
-                  transition: '0.2s'
-                }}
+                placeholder="e.g. Doe"
+                className={`text-input-field ${errors?.passengerList?.[i]?.lastName ? 'has-error' : ''}`}
+                autoComplete="family-name"
               />
               {errors?.passengerList?.[i]?.lastName && (
                 <span className="error-message"><AlertCircle size={13} /> {errors.passengerList[i].lastName.message}</span>
@@ -131,49 +82,24 @@ const PassengerDetails = ({ register, errors, watch, setValue, passengers = 1 })
           </div>
 
           {/* Passport Number */}
-          <div className="field-group" style={{ marginTop: '10px' }}>
-            <label style={{ fontSize: '0.85rem', fontWeight: 500, color: '#1f3a4b', display: 'flex', alignItems: 'center', gap: '4px' }}>
+          <div className="field-group passport-field-group">
+            <label className="input-field-label">
               <Contact size={13} /> <span>Passport Number *</span>
             </label>
             <input
               id={`passenger-${i}-passport`}
               type="text"
               {...register(`passengerList.${i}.passport`)}
-              placeholder="AB1234567"
-              className={errors?.passengerList?.[i]?.passport ? 'has-error' : ''}
-              style={{
-                width: '100%',
-                padding: '0.7rem 1rem',
-                border: errors?.passengerList?.[i]?.passport ? '2px solid #e74c3c' : '2px solid rgba(0,0,0,0.08)',
-                borderRadius: '14px',
-                fontSize: '0.95rem',
-                background: errors?.passengerList?.[i]?.passport ? '#fff5f5' : 'rgba(249,252,255,0.8)',
-                transition: '0.2s'
-              }}
+              placeholder="e.g. A12345678"
+              className={`text-input-field ${errors?.passengerList?.[i]?.passport ? 'has-error' : ''}`}
+              style={{ textTransform: 'uppercase' }}
+              maxLength={20}
+              autoComplete="off"
             />
+            <small className="field-help-text">Letters and numbers only (minimum 6 characters)</small>
             {errors?.passengerList?.[i]?.passport && (
               <span className="error-message"><AlertCircle size={13} /> {errors.passengerList[i].passport.message}</span>
             )}
-          </div>
-
-          {/* Date of Birth (Optional for children) */}
-          <div className="field-group" style={{ marginTop: '10px' }}>
-            <label style={{ fontSize: '0.85rem', fontWeight: 500, color: '#1f3a4b', display: 'flex', alignItems: 'center', gap: '4px' }}>
-              <Calendar size={13} /> <span>Date of Birth (Optional)</span>
-            </label>
-            <input
-              type="date"
-              {...register(`passengerList.${i}.dob`)}
-              style={{
-                width: '100%',
-                padding: '0.7rem 1rem',
-                border: '2px solid rgba(0,0,0,0.08)',
-                borderRadius: '14px',
-                fontSize: '0.95rem',
-                background: 'rgba(249,252,255,0.8)',
-                transition: '0.2s'
-              }}
-            />
           </div>
         </div>
       );
@@ -182,54 +108,37 @@ const PassengerDetails = ({ register, errors, watch, setValue, passengers = 1 })
   };
 
   return (
-    <div className="col-right">
+    <div className="passenger-details-wrapper">
       <div className="section-title">
-        <Contact size={18} /> <span>Passenger Details</span>
+        <Users size={18} /> <span>Passenger Information</span>
       </div>
 
-      <div style={{
-        background: '#f0f7ff',
-        padding: '10px 15px',
-        borderRadius: '8px',
-        marginBottom: '15px',
-        fontSize: '0.85rem',
-        color: '#1f4a5e',
-        borderLeft: '3px solid #2a7de1',
-        display: 'flex',
-        alignItems: 'center',
-        gap: '6px'
-      }}>
-        <Info size={16} color="#2a7de1" />
-        <span>Select "Child" for passengers under 12 years old.</span>
+      {/* Main Passenger List */}
+      <div className="passenger-list-container">
+        {renderPassengerFields()}
       </div>
 
-      {/* Dynamic passenger fields */}
-      {renderPassengerFields()}
+      {/* Email / Delivery Address */}
+      <div className="contact-details-box">
+        <div className="section-title">
+          <Mail size={18} /> <span>Ticket Delivery Email</span>
+        </div>
 
-      {/* Email - Shared for all passengers */}
-      <div className="field-group">
-        <label style={{ fontSize: '0.9rem', fontWeight: 500, color: '#1f3a4b', display: 'flex', alignItems: 'center', gap: '4px' }}>
-          <Mail size={14} /> <span>Email address *</span>
-        </label>
-        <input
-          id="passenger-email"
-          type="email"
-          {...register('email')}
-          placeholder="john.doe@example.com"
-          className={errors.email ? 'has-error' : ''}
-          style={{
-            width: '100%',
-            padding: '0.7rem 1rem',
-            border: errors.email ? '2px solid #e74c3c' : '2px solid rgba(0,0,0,0.08)',
-            borderRadius: '14px',
-            fontSize: '0.95rem',
-            background: errors.email ? '#fff5f5' : 'rgba(249,252,255,0.8)',
-            transition: '0.2s'
-          }}
-        />
-        {errors.email && (
-          <span className="error-message"><AlertCircle size={13} /> {errors.email.message}</span>
-        )}
+        <div className="field-group">
+          <label className="input-field-label">
+            <Mail size={13} /> <span>Email Address * (Your confirmed ticket PDF will be sent here)</span>
+          </label>
+          <input
+            type="email"
+            {...register('email')}
+            placeholder="e.g. yourname@gmail.com"
+            className={`text-input-field ${errors.email ? 'has-error' : ''}`}
+            autoComplete="email"
+          />
+          {errors.email && (
+            <span className="error-message"><AlertCircle size={13} /> {errors.email.message}</span>
+          )}
+        </div>
       </div>
     </div>
   );

@@ -7,6 +7,7 @@ import './App.css';
 
 // Lazy load components
 const HomePage = lazy(() => import('./pages/HomePage'));
+const PassengerPage = lazy(() => import('./pages/PassengerPage'));
 const TicketPage = lazy(() => import('./pages/TicketPage'));
 const PnrVerificationPage = lazy(() => import('./pages/PnrVerificationPage'));
 const PaymentCallbackPage = lazy(() => import('./pages/PaymentCallbackPage'));
@@ -32,6 +33,7 @@ function App() {
         <Suspense fallback={<LoadingFallback />}>
           <Routes>
             <Route path="/" element={<HomePage />} />
+            <Route path="/passengers" element={<PassengerPage />} />
             <Route path="/ticket" element={<TicketPage />} />
             <Route path="/payment/callback" element={<PaymentCallbackPage />} />
             <Route path="/verify" element={<PnrVerificationPage />} />

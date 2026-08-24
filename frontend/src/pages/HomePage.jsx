@@ -288,10 +288,10 @@ const HomePage = () => {
             </div>
 
             {/* Booking Form placed directly in hero */}
-            <div className="booking-card" style={{ 
+            <div style={{ 
               position: 'relative', 
               zIndex: 10,
-              maxWidth: '800px',
+              maxWidth: '750px',
               margin: '0 auto',
             }}>
               <BookingForm />

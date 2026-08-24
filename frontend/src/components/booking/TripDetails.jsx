@@ -84,7 +84,9 @@ const TripDetails = ({ register, errors, watch, setValue, routeError }) => {
           >
             −
           </button>
-          <span>{passengers}</span>
+          <span className="passenger-count-number" style={{ color: '#2563eb', fontWeight: '700', fontSize: '1.2rem' }}>
+            {passengers}
+          </span>
           <button 
             type="button" 
             onClick={() => {
