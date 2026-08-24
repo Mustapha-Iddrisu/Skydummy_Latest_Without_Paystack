@@ -34,10 +34,10 @@ const HomePage = () => {
       <section id="home" className="pnr-hero-banner" style={{ 
         position: 'relative', 
         zIndex: 10,
-        margin: '0 20px',
+        margin: '0 0.25rem',
         background: 'linear-gradient(135deg, #1a56db 0%, #3b82f6 35%, #93c5fd 65%, #bfdbfe 85%, #ffffff 100%)',
         minHeight: 'auto',
-        borderRadius: '30px',
+        borderRadius: '16px',
         overflow: 'hidden',
         boxShadow: '0 10px 40px rgba(26, 86, 219, 0.15)',
       }}>
@@ -166,7 +166,7 @@ const HomePage = () => {
         <div className="pnr-container" style={{
           maxWidth: '1200px',
           margin: '0 auto',
-          padding: '3rem 1.5rem 5rem',
+          padding: '1.75rem 0.5rem 2.5rem',
           position: 'relative',
           zIndex: 10,
         }}>
@@ -182,21 +182,21 @@ const HomePage = () => {
               background: 'rgba(255, 255, 255, 0.2)',
               backdropFilter: 'blur(10px)',
               color: '#ffffff',
-              padding: '0.4rem 1.2rem',
-              borderRadius: '30px',
-              fontSize: '0.85rem',
+              padding: '0.35rem 0.85rem',
+              borderRadius: '20px',
+              fontSize: '0.82rem',
               fontWeight: 600,
-              marginBottom: '1rem',
+              marginBottom: '0.75rem',
               border: '1px solid rgba(255, 255, 255, 0.3)',
             }}>
-              <ShieldCheck size={16} /> Official GDS Validation Portal
+              <ShieldCheck size={15} /> Official GDS Validation Portal
             </span>
             <h1 style={{ 
-              fontSize: '2.8rem', 
+              fontSize: '2.4rem', 
               fontWeight: 700, 
               color: '#ffffff',
               letterSpacing: '-0.01em',
-              marginBottom: '0.5rem',
+              marginBottom: '0.4rem',
               position: 'relative',
               zIndex: 10,
               textShadow: '0 2px 10px rgba(0,0,0,0.1)',
@@ -205,10 +205,10 @@ const HomePage = () => {
               Visa-ready dummy tickets
             </h1>
             <p style={{ 
-              fontSize: '1.15rem', 
+              fontSize: '1.05rem', 
               color: '#f0f9ff',
-              marginBottom: '1.5rem',
-              lineHeight: '1.6',
+              marginBottom: '1.25rem',
+              lineHeight: '1.5',
               position: 'relative',
               zIndex: 10,
               maxWidth: '700px',
@@ -223,22 +223,22 @@ const HomePage = () => {
             <div className="hero-features" style={{ 
               display: 'flex', 
               justifyContent: 'center', 
-              gap: '1.5rem', 
+              gap: '0.6rem', 
               flexWrap: 'wrap',
               position: 'relative',
               zIndex: 10,
-              marginBottom: '2rem',
+              marginBottom: '1.5rem',
             }}>
               {/* ✅ 100% Visa Approved - Green */}
               <span style={{ 
                 display: 'flex', 
                 alignItems: 'center', 
-                gap: '0.5rem',
+                gap: '0.4rem',
                 background: 'rgba(34, 197, 94, 0.2)',
                 backdropFilter: 'blur(10px)',
-                padding: '0.5rem 1.2rem',
-                borderRadius: '40px',
-                fontSize: '0.9rem',
+                padding: '0.35rem 0.75rem',
+                borderRadius: '30px',
+                fontSize: '0.82rem',
                 color: '#d1fae5',
                 border: '1px solid rgba(34, 197, 94, 0.3)',
                 position: 'relative',
@@ -252,12 +252,12 @@ const HomePage = () => {
               <span style={{ 
                 display: 'flex', 
                 alignItems: 'center', 
-                gap: '0.5rem',
+                gap: '0.4rem',
                 background: 'rgba(96, 165, 250, 0.2)',
                 backdropFilter: 'blur(10px)',
-                padding: '0.5rem 1.2rem',
-                borderRadius: '40px',
-                fontSize: '0.9rem',
+                padding: '0.35rem 0.75rem',
+                borderRadius: '30px',
+                fontSize: '0.82rem',
                 color: '#bfdbfe',
                 border: '1px solid rgba(96, 165, 250, 0.3)',
                 position: 'relative',
@@ -271,12 +271,12 @@ const HomePage = () => {
               <span style={{ 
                 display: 'flex', 
                 alignItems: 'center', 
-                gap: '0.5rem',
+                gap: '0.4rem',
                 background: 'rgba(251, 191, 36, 0.2)',
                 backdropFilter: 'blur(10px)',
-                padding: '0.5rem 1.2rem',
-                borderRadius: '40px',
-                fontSize: '0.9rem',
+                padding: '0.35rem 0.75rem',
+                borderRadius: '30px',
+                fontSize: '0.82rem',
                 color: '#fde68a',
                 border: '1px solid rgba(251, 191, 36, 0.3)',
                 position: 'relative',
@@ -302,7 +302,7 @@ const HomePage = () => {
 
       {/* Why Us Section */}
       <section id="why-us" className="section-why-us" style={{ 
-        padding: '60px 20px', 
+        padding: '35px 8px', 
         maxWidth: '1200px', 
         margin: '0 auto',
         position: 'relative',
@@ -311,9 +311,9 @@ const HomePage = () => {
         <div className="section-container">
           <h2 style={{ 
             textAlign: 'center', 
-            fontSize: '2.2rem', 
+            fontSize: '1.8rem', 
             color: '#0b2b40', 
-            marginBottom: '40px',
+            marginBottom: '24px',
             fontWeight: 700,
             position: 'relative',
             zIndex: 10
@@ -323,9 +323,9 @@ const HomePage = () => {
           </h2>
           <div className="features-grid" style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
-            gap: '2rem',
-            padding: '0 1rem'
+            gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))',
+            gap: '1rem',
+            padding: '0 0.25rem'
           }}>
             <div className="feature-card" style={{
               background: '#ffffff',

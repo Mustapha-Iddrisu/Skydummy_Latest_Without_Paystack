@@ -9,8 +9,8 @@
   background: rgba(255, 255, 255, 0.88);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  border-radius: 2.5rem;
-  padding: 2rem 2.5rem;
+  border-radius: 1.5rem;
+  padding: 0.75rem 0.5rem;
   box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
   border: 1px solid rgba(255, 255, 255, 0.3);
   position: relative;
@@ -78,11 +78,11 @@
 .nav-container {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 0 20px;
+  padding: 0 10px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  height: 70px;
+  height: 64px;
 }
 
 .nav-brand {
@@ -5206,38 +5206,38 @@ section {
 /* Trip Details Single View Container (Home Hero Card) */
 .trip-booking-card {
   background: rgba(255, 255, 255, 0.98);
-  border-radius: 1.5rem;
-  padding: 2rem 1.75rem;
+  border-radius: 1.25rem;
+  padding: 1.25rem 0.85rem;
   box-shadow: 0 10px 30px rgba(11, 43, 64, 0.08);
   border: 1px solid rgba(42, 125, 225, 0.12);
   width: 100%;
-  max-width: 680px;
+  max-width: 720px;
   margin: 0 auto;
   box-sizing: border-box;
 }
 
 .trip-details-container {
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem;
 }
 
 .trip-action-card {
   background: #f8fafc;
   border: 1px solid #e2e8f0;
-  border-radius: 14px;
-  padding: 1.25rem;
+  border-radius: 12px;
+  padding: 0.85rem 0.75rem;
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 0.75rem;
 }
 
 .trip-action-summary {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 1rem;
+  gap: 0.75rem;
   flex-wrap: wrap;
   border-bottom: 1px solid #e2e8f0;
-  padding-bottom: 0.8rem;
+  padding-bottom: 0.6rem;
 }
 
 .summary-col {
@@ -5246,7 +5246,7 @@ section {
 }
 
 .summary-col .summary-label {
-  font-size: 0.75rem;
+  font-size: 0.72rem;
   color: #64748b;
   text-transform: uppercase;
   letter-spacing: 0.5px;
@@ -5254,31 +5254,31 @@ section {
 }
 
 .summary-col .summary-val {
-  font-size: 0.95rem;
+  font-size: 0.9rem;
   color: #0f172a;
   font-weight: 600;
 }
 
 .summary-col .summary-price {
-  font-size: 1.25rem;
+  font-size: 1.2rem;
   color: #2563eb;
   font-weight: 800;
 }
 
 .btn-proceed-step {
   width: 100%;
-  padding: 1rem 1.5rem;
+  padding: 0.85rem 1.25rem;
   background: #2563eb;
   color: #ffffff;
-  border-radius: 12px;
-  font-size: 1.05rem;
+  border-radius: 10px;
+  font-size: 1rem;
   font-weight: 700;
   border: none;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 0.6rem;
+  gap: 0.5rem;
   box-shadow: 0 4px 14px rgba(37, 99, 235, 0.3);
   transition: all 0.25s ease;
 }
@@ -5292,9 +5292,9 @@ section {
 .booking-trust-strip {
   display: flex;
   justify-content: center;
-  gap: 1.5rem;
+  gap: 1rem;
   flex-wrap: wrap;
-  font-size: 0.8rem;
+  font-size: 0.78rem;
   color: #475569;
   font-weight: 500;
 }
@@ -5302,7 +5302,7 @@ section {
 .trust-item {
   display: flex;
   align-items: center;
-  gap: 0.4rem;
+  gap: 0.35rem;
 }
 
 /* =========================================================================
@@ -5312,7 +5312,7 @@ section {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  padding-top: 20px;
+  padding-top: 10px;
   background: #f8fafc;
   position: relative;
   z-index: 20 !important;
@@ -5324,7 +5324,7 @@ section {
   max-width: 1100px;
   width: 100%;
   margin: 0 auto;
-  padding: 1.5rem 1rem 3rem;
+  padding: 0.75rem 0.35rem 2rem;
   box-sizing: border-box;
   position: relative;
   z-index: 25 !important;
@@ -5332,9 +5332,9 @@ section {
 
 .passenger-header-card {
   background: #ffffff;
-  border-radius: 16px;
-  padding: 1.5rem;
-  margin-bottom: 1.5rem;
+  border-radius: 14px;
+  padding: 0.85rem 0.75rem;
+  margin-bottom: 1rem;
   border: 1px solid #e2e8f0;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
 }
@@ -5344,33 +5344,33 @@ section {
   align-items: center;
   justify-content: space-between;
   flex-wrap: wrap;
-  gap: 1rem;
+  gap: 0.75rem;
   background: #f0f9ff;
   border: 1px solid #bae6fd;
-  padding: 1rem 1.25rem;
-  border-radius: 12px;
+  padding: 0.65rem 0.75rem;
+  border-radius: 10px;
 }
 
 .recap-route {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
+  gap: 0.5rem;
 }
 
 .recap-meta {
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: 0.75rem;
 }
 
 .recap-badge {
   display: inline-flex;
   align-items: center;
-  gap: 0.4rem;
+  gap: 0.35rem;
   background: #ffffff;
-  padding: 0.35rem 0.75rem;
-  border-radius: 20px;
-  font-size: 0.8rem;
+  padding: 0.25rem 0.65rem;
+  border-radius: 16px;
+  font-size: 0.78rem;
   font-weight: 600;
   color: #0369a1;
   border: 1px solid #bae6fd;
@@ -5379,13 +5379,13 @@ section {
 .btn-edit-trip {
   display: inline-flex;
   align-items: center;
-  gap: 0.4rem;
+  gap: 0.35rem;
   color: #2563eb;
-  font-size: 0.85rem;
+  font-size: 0.82rem;
   font-weight: 600;
   text-decoration: none;
-  padding: 0.35rem 0.75rem;
-  border-radius: 8px;
+  padding: 0.25rem 0.65rem;
+  border-radius: 6px;
   background: #ffffff;
   border: 1px solid #bfdbfe;
   transition: all 0.2s ease;
@@ -5398,7 +5398,7 @@ section {
 .passenger-layout-grid {
   display: grid;
   grid-template-columns: 1.4fr 1fr;
-  gap: 1.75rem;
+  gap: 1rem;
   align-items: start;
 }
 
@@ -5406,15 +5406,15 @@ section {
 .passenger-col-sidebar {
   display: flex;
   flex-direction: column;
-  gap: 1.25rem;
+  gap: 0.85rem;
 }
 
 .passenger-card-item {
   background: #ffffff;
   border: 1px solid #e2e8f0;
-  border-radius: 14px;
-  padding: 1.25rem;
-  margin-bottom: 1rem;
+  border-radius: 12px;
+  padding: 0.85rem 0.75rem;
+  margin-bottom: 0.75rem;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
 }
 
@@ -5424,31 +5424,31 @@ section {
   align-items: center;
   flex-wrap: wrap;
   gap: 0.5rem;
-  margin-bottom: 1rem;
-  padding-bottom: 0.5rem;
+  margin-bottom: 0.75rem;
+  padding-bottom: 0.4rem;
   border-bottom: 1px solid #f1f5f9;
 }
 
 .passenger-card-title {
   margin: 0;
   color: #0f172a;
-  font-size: 1rem;
+  font-size: 0.95rem;
   font-weight: 700;
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.4rem;
 }
 
 .passenger-type-selector {
   display: flex;
-  gap: 0.75rem;
+  gap: 0.5rem;
 }
 
 .type-radio-label {
   display: flex;
   align-items: center;
-  gap: 0.35rem;
-  font-size: 0.8rem;
+  gap: 0.3rem;
+  font-size: 0.78rem;
   color: #475569;
   font-weight: 500;
   cursor: pointer;
@@ -5457,15 +5457,15 @@ section {
 .passenger-inputs-row {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 1rem;
+  gap: 0.75rem;
 }
 
 .text-input-field {
   width: 100%;
-  padding: 0.75rem 1rem;
+  padding: 0.65rem 0.75rem;
   border: 1.5px solid #cbd5e1;
-  border-radius: 10px;
-  font-size: 0.95rem;
+  border-radius: 8px;
+  font-size: 0.9rem;
   color: #0f172a;
   background: #ffffff;
   box-sizing: border-box;
@@ -5484,59 +5484,59 @@ section {
 }
 
 .input-field-label {
-  font-size: 0.85rem;
+  font-size: 0.82rem;
   font-weight: 600;
   color: #334155;
   display: flex;
   align-items: center;
-  gap: 0.35rem;
-  margin-bottom: 0.35rem;
+  gap: 0.3rem;
+  margin-bottom: 0.25rem;
 }
 
 .field-help-text {
   display: block;
-  font-size: 0.75rem;
+  font-size: 0.72rem;
   color: #94a3b8;
-  margin-top: 0.25rem;
+  margin-top: 0.2rem;
 }
 
 .contact-details-box {
   background: #ffffff;
   border: 1px solid #e2e8f0;
-  border-radius: 14px;
-  padding: 1.25rem;
+  border-radius: 12px;
+  padding: 0.85rem 0.75rem;
 }
 
 .coupon-card-box {
   background: #ffffff;
   border: 1px solid #e2e8f0;
-  border-radius: 14px;
-  padding: 1.25rem;
+  border-radius: 12px;
+  padding: 0.85rem 0.75rem;
 }
 
 .order-summary-card {
   background: #ffffff;
   border: 1px solid #e2e8f0;
-  border-radius: 14px;
-  padding: 1.25rem;
+  border-radius: 12px;
+  padding: 0.85rem 0.75rem;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
 }
 
 .summary-card-title {
-  margin: 0 0 1rem 0;
-  font-size: 1.05rem;
+  margin: 0 0 0.75rem 0;
+  font-size: 0.95rem;
   font-weight: 700;
   color: #0f172a;
-  padding-bottom: 0.5rem;
+  padding-bottom: 0.4rem;
   border-bottom: 1px solid #f1f5f9;
 }
 
 .summary-item-row {
   display: flex;
   justify-content: space-between;
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   color: #475569;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.4rem;
 }
 
 .summary-item-row.discount {
@@ -5547,26 +5547,26 @@ section {
 .summary-divider {
   height: 1px;
   background: #e2e8f0;
-  margin: 0.75rem 0;
+  margin: 0.5rem 0;
 }
 
 .summary-total-row {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-top: 0.5rem;
+  margin-top: 0.4rem;
 }
 
 .total-label {
   display: block;
-  font-size: 1rem;
+  font-size: 0.95rem;
   font-weight: 700;
   color: #0f172a;
 }
 
 .total-subtext {
   display: block;
-  font-size: 0.75rem;
+  font-size: 0.72rem;
   color: #64748b;
 }
 
@@ -5576,28 +5576,28 @@ section {
 
 .total-usd-amount {
   display: block;
-  font-size: 1.35rem;
+  font-size: 1.25rem;
   font-weight: 800;
   color: #2563eb;
 }
 
 .total-ghs-approx {
   display: block;
-  font-size: 0.8rem;
+  font-size: 0.75rem;
   color: #64748b;
 }
 
 .coupon-badge-strip {
-  margin-top: 0.75rem;
+  margin-top: 0.6rem;
   background: #f0fdf4;
   color: #16a34a;
-  font-size: 0.8rem;
+  font-size: 0.75rem;
   font-weight: 600;
-  padding: 0.4rem 0.6rem;
+  padding: 0.3rem 0.5rem;
   border-radius: 6px;
   display: flex;
   align-items: center;
-  gap: 0.4rem;
+  gap: 0.35rem;
 }
 
 .coupon-badge-strip.admin {
@@ -5607,46 +5607,46 @@ section {
 
 /* Bottom Pay Bar */
 .passenger-pay-bottom-bar {
-  margin-top: 2rem;
+  margin-top: 1.25rem;
   background: #ffffff;
   border: 1px solid #e2e8f0;
-  border-radius: 16px;
-  padding: 1.5rem;
+  border-radius: 12px;
+  padding: 0.85rem 0.75rem;
   display: flex;
   flex-direction: column;
-  gap: 1.25rem;
+  gap: 0.85rem;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
 }
 
 .bottom-disclaimer {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  font-size: 0.85rem;
+  gap: 0.4rem;
+  font-size: 0.8rem;
   color: #475569;
   background: #f8fafc;
-  padding: 0.75rem 1rem;
-  border-radius: 10px;
+  padding: 0.6rem 0.75rem;
+  border-radius: 8px;
 }
 
 .bottom-action-buttons {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 1rem;
+  gap: 0.75rem;
   flex-wrap: wrap;
 }
 
 .btn-back-link {
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.4rem;
   color: #64748b;
   font-weight: 600;
-  font-size: 0.95rem;
+  font-size: 0.9rem;
   text-decoration: none;
-  padding: 0.75rem 1.25rem;
-  border-radius: 10px;
+  padding: 0.65rem 1rem;
+  border-radius: 8px;
   background: #f1f5f9;
   transition: all 0.2s ease;
 }
@@ -5659,18 +5659,18 @@ section {
 .btn-pay-now {
   flex: 1;
   max-width: 420px;
-  padding: 1rem 1.75rem;
+  padding: 0.85rem 1.5rem;
   background: #2563eb;
   color: #ffffff;
-  font-size: 1.1rem;
+  font-size: 1.05rem;
   font-weight: 700;
   border: none;
-  border-radius: 12px;
+  border-radius: 10px;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 0.6rem;
+  gap: 0.5rem;
   box-shadow: 0 4px 15px rgba(37, 99, 235, 0.35);
   transition: all 0.2s ease;
 }
@@ -5693,38 +5693,47 @@ section {
   }
 
   .app-wrapper {
-    padding: 0.5rem !important;
+    padding: 0.25rem 0.15rem !important;
     overflow-x: hidden;
+    border-radius: 12px !important;
   }
 
   .pnr-hero-banner {
     margin: 0 !important;
-    border-radius: 20px !important;
-    padding: 2rem 1rem !important;
+    border-radius: 12px !important;
+    padding: 1.25rem 0.35rem !important;
   }
 
   .trip-booking-card {
-    padding: 1.25rem 1rem !important;
-    border-radius: 1rem !important;
+    padding: 0.75rem 0.5rem !important;
+    border-radius: 12px !important;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06) !important;
   }
 
   .passenger-layout-grid {
     grid-template-columns: 1fr !important;
-    gap: 1.25rem !important;
+    gap: 0.85rem !important;
   }
 
   .passenger-inputs-row {
     grid-template-columns: 1fr !important;
-    gap: 0.75rem !important;
+    gap: 0.5rem !important;
   }
 
   .passenger-main-container {
-    padding: 1rem 0.5rem 2rem !important;
+    padding: 0.5rem 0.15rem 1.5rem !important;
   }
 
   .passenger-header-card {
-    padding: 1rem !important;
+    padding: 0.65rem 0.45rem !important;
+  }
+
+  .passenger-card-item {
+    padding: 0.65rem 0.45rem !important;
+  }
+
+  .passenger-pay-bottom-bar {
+    padding: 0.65rem 0.45rem !important;
   }
 
   .trip-recap-banner {
