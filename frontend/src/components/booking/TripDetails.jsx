@@ -53,121 +53,135 @@ const TripDetails = ({ register, errors, watch, setValue, routeError }) => {
   }, [departure, destination, departDate, returnDate, tripType, passengers, fetchAvailableRoutes]);
 
   return (
-    <div className="col-left">
-      <div className="section-title">
-        <CalendarDays size={18} /> <span>Trip details</span>
-      </div>
-
-      <div className="field-group radio-group">
-        <label className={`radio-label ${tripType === 'oneway' ? 'active' : ''}`}>
-          <input type="radio" value="oneway" {...register('tripType')} />
-          <ArrowRight size={15} /> One-way
-          <span className="price-tag">$10</span>
-        </label>
-        <label className={`radio-label ${tripType === 'round' ? 'active' : ''}`}>
-          <input type="radio" value="round" {...register('tripType')} />
-          <ArrowRightLeft size={15} /> Round trip
-          <span className="price-tag">$12</span>
-        </label>
-      </div>
-
-      <div className="field-group">
-        <label><Users size={16} /> <span>Passengers</span></label>
-        <div className="passenger-selector">
-          <button 
-            type="button" 
-            onClick={() => {
-              const val = Math.max(1, passengers - 1);
-              setValue('passengers', val);
-              updateField('passengers', val);
-            }}
-          >
-            −
-          </button>
-          <span className="passenger-count-number" style={{ color: '#2563eb', fontWeight: '700', fontSize: '1.2rem' }}>
-            {passengers}
-          </span>
-          <button 
-            type="button" 
-            onClick={() => {
-              const val = Math.min(9, passengers + 1);
-              setValue('passengers', val);
-              updateField('passengers', val);
-            }}
-          >
-            +
-          </button>
+    <div className="trip-details-expanded-view">
+      {/* Top Header & Trip Type + Passenger Controls */}
+      <div className="trip-top-bar">
+        <div className="section-title" style={{ marginBottom: 0, borderBottom: 'none' }}>
+          <CalendarDays size={19} /> <span>Trip Details</span>
         </div>
-        {errors.passengers && (
-          <span className="error-message">{errors.passengers.message}</span>
-        )}
+
+        <div className="trip-top-controls">
+          <div className="field-group radio-group" style={{ marginBottom: 0 }}>
+            <label className={`radio-label ${tripType === 'oneway' ? 'active' : ''}`}>
+              <input type="radio" value="oneway" {...register('tripType')} />
+              <ArrowRight size={15} /> One-way
+              <span className="price-tag">$10</span>
+            </label>
+            <label className={`radio-label ${tripType === 'round' ? 'active' : ''}`}>
+              <input type="radio" value="round" {...register('tripType')} />
+              <ArrowRightLeft size={15} /> Round trip
+              <span className="price-tag">$12</span>
+            </label>
+          </div>
+
+          <div className="passenger-control-box">
+            <label className="passenger-control-label">
+              <Users size={15} /> <span>Passengers:</span>
+            </label>
+            <div className="passenger-selector">
+              <button 
+                type="button" 
+                onClick={() => {
+                  const val = Math.max(1, passengers - 1);
+                  setValue('passengers', val);
+                  updateField('passengers', val);
+                }}
+              >
+                −
+              </button>
+              <span className="passenger-count-number">
+                {passengers}
+              </span>
+              <button 
+                type="button" 
+                onClick={() => {
+                  const val = Math.min(9, passengers + 1);
+                  setValue('passengers', val);
+                  updateField('passengers', val);
+                }}
+              >
+                +
+              </button>
+            </div>
+            {errors.passengers && (
+              <span className="error-message">{errors.passengers.message}</span>
+            )}
+          </div>
+        </div>
       </div>
 
-      <div className="field-group">
-        <input type="hidden" {...register('departure')} />
-        <AirportSearch
-          label="Departure airport"
-          value={watch('departure')}
-          onChange={(code) => {
-            setValue('departure', code, { shouldValidate: true, shouldDirty: true, shouldTouch: true });
-            updateField('departure', code);
-          }}
-          placeholder="Type airport name or code..."
-          required={true}
-          hasError={!!errors.departure}
-          className={errors.departure ? 'has-error' : ''}
-        />
-        {errors.departure && (
-          <span className="error-message"><AlertCircle size={14} /> {errors.departure.message}</span>
-        )}
-      </div>
-
-      <div className="field-group">
-        <input type="hidden" {...register('destination')} />
-        <AirportSearch
-          label="Destination airport"
-          value={watch('destination')}
-          onChange={(code) => {
-            setValue('destination', code, { shouldValidate: true, shouldDirty: true, shouldTouch: true });
-            updateField('destination', code);
-          }}
-          placeholder="Type airport name or code..."
-          required={true}
-          hasError={!!errors.destination}
-          className={errors.destination ? 'has-error' : ''}
-        />
-        {errors.destination && (
-          <span className="error-message"><AlertCircle size={14} /> {errors.destination.message}</span>
-        )}
-      </div>
-
-      <div className="field-group">
-        <label><Calendar size={16} /> <span>Departure date</span></label>
-        <input 
-          type="date" 
-          {...register('departDate')}
-          className={errors.departDate ? 'has-error' : ''}
-          min={new Date().toISOString().split('T')[0]}
-        />
-        {errors.departDate && (
-          <span className="error-message"><AlertCircle size={14} /> {errors.departDate.message}</span>
-        )}
-      </div>
-
-      {tripType === 'round' && (
-        <div className="field-group">
-          <label><CalendarRange size={16} /> <span>Return date</span></label>
-          <input 
-            type="date" 
-            {...register('returnDate')}
-            className={errors.returnDate ? 'has-error' : ''}
-            min={watch('departDate') || new Date().toISOString().split('T')[0]}
+      {/* Main Flight Inputs Expanded Horizontally */}
+      <div className="trip-fields-horizontal-grid">
+        {/* Departure Airport */}
+        <div className="field-group trip-input-col">
+          <input type="hidden" {...register('departure')} />
+          <AirportSearch
+            label="Departure Airport"
+            value={watch('departure')}
+            onChange={(code) => {
+              setValue('departure', code, { shouldValidate: true, shouldDirty: true, shouldTouch: true });
+              updateField('departure', code);
+            }}
+            placeholder="Type departure airport name or code (e.g. London Heathrow, JFK)..."
+            required={true}
+            hasError={!!errors.departure}
+            className={errors.departure ? 'has-error' : ''}
           />
-          {errors.returnDate && (
-            <span className="error-message"><AlertCircle size={14} /> {errors.returnDate.message}</span>
+          {errors.departure && (
+            <span className="error-message"><AlertCircle size={14} /> {errors.departure.message}</span>
           )}
         </div>
-      )}
+
+        {/* Destination Airport */}
+        <div className="field-group trip-input-col">
+          <input type="hidden" {...register('destination')} />
+          <AirportSearch
+            label="Destination Airport"
+            value={watch('destination')}
+            onChange={(code) => {
+              setValue('destination', code, { shouldValidate: true, shouldDirty: true, shouldTouch: true });
+              updateField('destination', code);
+            }}
+            placeholder="Type destination airport name or code (e.g. Dubai, Paris CDG)..."
+            required={true}
+            hasError={!!errors.destination}
+            className={errors.destination ? 'has-error' : ''}
+          />
+          {errors.destination && (
+            <span className="error-message"><AlertCircle size={14} /> {errors.destination.message}</span>
+          )}
+        </div>
+
+        {/* Departure Date */}
+        <div className={`field-group trip-input-col ${tripType === 'oneway' ? 'span-dates-full' : ''}`}>
+          <label><Calendar size={16} /> <span>Departure Date</span></label>
+          <input 
+            type="date" 
+            {...register('departDate')}
+            className={errors.departDate ? 'has-error' : ''}
+            min={new Date().toISOString().split('T')[0]}
+          />
+          {errors.departDate && (
+            <span className="error-message"><AlertCircle size={14} /> {errors.departDate.message}</span>
+          )}
+        </div>
+
+        {/* Return Date (if round trip) */}
+        {tripType === 'round' && (
+          <div className="field-group trip-input-col">
+            <label><CalendarRange size={16} /> <span>Return Date</span></label>
+            <input 
+              type="date" 
+              {...register('returnDate')}
+              className={errors.returnDate ? 'has-error' : ''}
+              min={watch('departDate') || new Date().toISOString().split('T')[0]}
+            />
+            {errors.returnDate && (
+              <span className="error-message"><AlertCircle size={14} /> {errors.returnDate.message}</span>
+            )}
+          </div>
+        )}
+      </div>
 
       {/* Available Routes Component - User picks one after selecting date(s) */}
       <RouteSelection

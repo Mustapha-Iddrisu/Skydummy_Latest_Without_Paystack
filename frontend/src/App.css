@@ -4,7 +4,7 @@
    APP WRAPPER
    ============================================ */
 .app-wrapper {
-  max-width: 1100px;
+  max-width: 1200px;
   margin: 0 auto;
   background: rgba(255, 255, 255, 0.88);
   backdrop-filter: blur(12px);
@@ -5216,38 +5216,105 @@ section {
 /* Trip Details Single View Container (Home Hero Card) */
 .trip-booking-card {
   background: rgba(255, 255, 255, 0.98);
-  border-radius: 1.25rem;
-  padding: 1.25rem 0.85rem;
-  box-shadow: 0 10px 30px rgba(11, 43, 64, 0.08);
-  border: 1px solid rgba(42, 125, 225, 0.12);
+  border-radius: 1.5rem;
+  padding: 1.5rem 1.75rem;
+  box-shadow: 0 12px 40px rgba(11, 43, 64, 0.1);
+  border: 1px solid rgba(42, 125, 225, 0.15);
   width: 100%;
-  max-width: 720px;
+  max-width: 100%;
   margin: 0 auto;
   box-sizing: border-box;
 }
 
 .trip-details-container {
-  margin-bottom: 1rem;
+  margin-bottom: 1.25rem;
+}
+
+.trip-details-expanded-view {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  width: 100%;
+}
+
+.trip-top-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+  padding-bottom: 0.85rem;
+  border-bottom: 1px solid rgba(42, 125, 225, 0.12);
+}
+
+.trip-top-controls {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  flex-wrap: wrap;
+}
+
+.passenger-control-box {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.passenger-control-label {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: #1f3a4b;
+  margin: 0;
+}
+
+/* Horizontal Grid for Airport and Date Inputs */
+.trip-fields-horizontal-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.25rem 1.5rem;
+  width: 100%;
+}
+
+.trip-input-col {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.trip-input-col.span-dates-full {
+  grid-column: 1 / -1;
+}
+
+.trip-fields-horizontal-grid .airport-input,
+.trip-fields-horizontal-grid input[type="date"] {
+  width: 100%;
+  padding: 0.8rem 1rem;
+  font-size: 0.95rem;
+  border-radius: 12px;
+  background: rgba(249, 252, 255, 0.9);
 }
 
 .trip-action-card {
   background: #f8fafc;
   border: 1px solid #e2e8f0;
-  border-radius: 12px;
-  padding: 0.85rem 0.75rem;
+  border-radius: 14px;
+  padding: 1.1rem 1.25rem;
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
+  gap: 0.85rem;
 }
 
 .trip-action-summary {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 0.75rem;
+  gap: 1rem;
   flex-wrap: wrap;
   border-bottom: 1px solid #e2e8f0;
-  padding-bottom: 0.6rem;
+  padding-bottom: 0.75rem;
 }
 
 .summary-col {
@@ -5264,24 +5331,24 @@ section {
 }
 
 .summary-col .summary-val {
-  font-size: 0.9rem;
+  font-size: 0.95rem;
   color: #0f172a;
   font-weight: 600;
 }
 
 .summary-col .summary-price {
-  font-size: 1.2rem;
+  font-size: 1.35rem;
   color: #2563eb;
   font-weight: 800;
 }
 
 .btn-proceed-step {
   width: 100%;
-  padding: 0.85rem 1.25rem;
+  padding: 0.95rem 1.5rem;
   background: #2563eb;
   color: #ffffff;
-  border-radius: 10px;
-  font-size: 1rem;
+  border-radius: 12px;
+  font-size: 1.05rem;
   font-weight: 700;
   border: none;
   cursor: pointer;
@@ -5302,9 +5369,9 @@ section {
 .booking-trust-strip {
   display: flex;
   justify-content: center;
-  gap: 1rem;
+  gap: 1.5rem;
   flex-wrap: wrap;
-  font-size: 0.78rem;
+  font-size: 0.82rem;
   color: #475569;
   font-weight: 500;
 }
@@ -5313,6 +5380,33 @@ section {
   display: flex;
   align-items: center;
   gap: 0.35rem;
+}
+
+@media (max-width: 768px) {
+  .trip-booking-card {
+    padding: 1.25rem 1rem;
+    border-radius: 1.15rem;
+  }
+
+  .trip-top-bar {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+
+  .trip-top-controls {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .trip-fields-horizontal-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .trip-input-col.span-dates-full {
+    grid-column: 1;
+  }
 }
 
 /* =========================================================================
@@ -5331,10 +5425,10 @@ section {
 
 .passenger-main-container {
   flex: 1;
-  max-width: 1100px;
+  max-width: 1200px;
   width: 100%;
   margin: 0 auto;
-  padding: 0.75rem 0.35rem 2rem;
+  padding: 1rem 1rem 2.5rem;
   box-sizing: border-box;
   position: relative;
   z-index: 25 !important;
@@ -5343,8 +5437,8 @@ section {
 .passenger-header-card {
   background: #ffffff;
   border-radius: 14px;
-  padding: 0.85rem 0.75rem;
-  margin-bottom: 1rem;
+  padding: 1rem 1.25rem;
+  margin-bottom: 1.25rem;
   border: 1px solid #e2e8f0;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
 }
@@ -5357,14 +5451,14 @@ section {
   gap: 0.75rem;
   background: #f0f9ff;
   border: 1px solid #bae6fd;
-  padding: 0.65rem 0.75rem;
-  border-radius: 10px;
+  padding: 0.85rem 1.25rem;
+  border-radius: 12px;
 }
 
 .recap-route {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.6rem;
 }
 
 .recap-meta {
@@ -5378,9 +5472,9 @@ section {
   align-items: center;
   gap: 0.35rem;
   background: #ffffff;
-  padding: 0.25rem 0.65rem;
+  padding: 0.3rem 0.75rem;
   border-radius: 16px;
-  font-size: 0.78rem;
+  font-size: 0.82rem;
   font-weight: 600;
   color: #0369a1;
   border: 1px solid #bae6fd;
@@ -5391,11 +5485,11 @@ section {
   align-items: center;
   gap: 0.35rem;
   color: #2563eb;
-  font-size: 0.82rem;
+  font-size: 0.84rem;
   font-weight: 600;
   text-decoration: none;
-  padding: 0.25rem 0.65rem;
-  border-radius: 6px;
+  padding: 0.3rem 0.75rem;
+  border-radius: 8px;
   background: #ffffff;
   border: 1px solid #bfdbfe;
   transition: all 0.2s ease;
@@ -5405,27 +5499,25 @@ section {
   background: #eff6ff;
 }
 
-.passenger-layout-grid {
-  display: grid;
-  grid-template-columns: 1.4fr 1fr;
-  gap: 1rem;
-  align-items: start;
-}
-
-.passenger-col-details,
-.passenger-col-sidebar {
+/* Stacking vertical flow so sections follow each other down */
+.passenger-vertical-flow {
   display: flex;
   flex-direction: column;
-  gap: 0.85rem;
+  gap: 1.25rem;
+  width: 100%;
+}
+
+.passenger-details-section {
+  width: 100%;
 }
 
 .passenger-card-item {
   background: #ffffff;
   border: 1px solid #e2e8f0;
-  border-radius: 12px;
-  padding: 0.85rem 0.75rem;
-  margin-bottom: 0.75rem;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+  border-radius: 14px;
+  padding: 1.25rem 1.25rem;
+  margin-bottom: 1rem;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.02);
 }
 
 .passenger-card-header {
@@ -5434,31 +5526,31 @@ section {
   align-items: center;
   flex-wrap: wrap;
   gap: 0.5rem;
-  margin-bottom: 0.75rem;
-  padding-bottom: 0.4rem;
+  margin-bottom: 0.85rem;
+  padding-bottom: 0.5rem;
   border-bottom: 1px solid #f1f5f9;
 }
 
 .passenger-card-title {
   margin: 0;
   color: #0f172a;
-  font-size: 0.95rem;
+  font-size: 1rem;
   font-weight: 700;
   display: flex;
   align-items: center;
-  gap: 0.4rem;
+  gap: 0.45rem;
 }
 
 .passenger-type-selector {
   display: flex;
-  gap: 0.5rem;
+  gap: 0.75rem;
 }
 
 .type-radio-label {
   display: flex;
   align-items: center;
-  gap: 0.3rem;
-  font-size: 0.78rem;
+  gap: 0.35rem;
+  font-size: 0.82rem;
   color: #475569;
   font-weight: 500;
   cursor: pointer;
@@ -5467,15 +5559,15 @@ section {
 .passenger-inputs-row {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 0.75rem;
+  gap: 1rem;
 }
 
 .text-input-field {
   width: 100%;
-  padding: 0.65rem 0.75rem;
+  padding: 0.75rem 0.95rem;
   border: 1.5px solid #cbd5e1;
-  border-radius: 8px;
-  font-size: 0.9rem;
+  border-radius: 10px;
+  font-size: 0.95rem;
   color: #0f172a;
   background: #ffffff;
   box-sizing: border-box;
@@ -5494,59 +5586,69 @@ section {
 }
 
 .input-field-label {
-  font-size: 0.82rem;
+  font-size: 0.86rem;
   font-weight: 600;
   color: #334155;
   display: flex;
   align-items: center;
-  gap: 0.3rem;
-  margin-bottom: 0.25rem;
+  gap: 0.35rem;
+  margin-bottom: 0.35rem;
 }
 
 .field-help-text {
   display: block;
-  font-size: 0.72rem;
+  font-size: 0.76rem;
   color: #94a3b8;
-  margin-top: 0.2rem;
+  margin-top: 0.25rem;
 }
 
 .contact-details-box {
   background: #ffffff;
   border: 1px solid #e2e8f0;
-  border-radius: 12px;
-  padding: 0.85rem 0.75rem;
+  border-radius: 14px;
+  padding: 1.25rem 1.25rem;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.02);
 }
 
 .coupon-card-box {
   background: #ffffff;
   border: 1px solid #e2e8f0;
-  border-radius: 12px;
-  padding: 0.85rem 0.75rem;
+  border-radius: 14px;
+  padding: 1.25rem 1.25rem;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.02);
+}
+
+.payment-section {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  padding: 1.25rem 1.25rem;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.02);
 }
 
 .order-summary-card {
   background: #ffffff;
   border: 1px solid #e2e8f0;
-  border-radius: 12px;
-  padding: 0.85rem 0.75rem;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+  border-radius: 14px;
+  padding: 1.25rem 1.25rem;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.03);
 }
 
 .summary-card-title {
-  margin: 0 0 0.75rem 0;
-  font-size: 0.95rem;
+  margin: 0 0 0.85rem 0;
+  font-size: 1.05rem;
   font-weight: 700;
   color: #0f172a;
-  padding-bottom: 0.4rem;
+  padding-bottom: 0.5rem;
   border-bottom: 1px solid #f1f5f9;
 }
 
 .summary-item-row {
   display: flex;
   justify-content: space-between;
-  font-size: 0.85rem;
+  font-size: 0.92rem;
   color: #475569;
-  margin-bottom: 0.4rem;
+  margin-bottom: 0.5rem;
 }
 
 .summary-item-row.discount {
@@ -5720,8 +5822,7 @@ section {
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06) !important;
   }
 
-  .passenger-layout-grid {
-    grid-template-columns: 1fr !important;
+  .passenger-vertical-flow {
     gap: 0.85rem !important;
   }
 

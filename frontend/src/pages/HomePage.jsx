@@ -308,7 +308,8 @@ const HomePage = () => {
             <div style={{ 
               position: 'relative', 
               zIndex: 10,
-              maxWidth: '750px',
+              maxWidth: '1200px',
+              width: '100%',
               margin: '0 auto',
             }}>
               <BookingForm />

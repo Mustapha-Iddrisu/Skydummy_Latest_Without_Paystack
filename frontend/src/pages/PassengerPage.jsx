@@ -346,9 +346,9 @@ const PassengerPage = () => {
             </div>
           )}
 
-          <div className="passenger-layout-grid">
-            {/* Left Column: Passenger Details */}
-            <div className="passenger-col-details">
+          <div className="passenger-vertical-flow">
+            {/* 1. Passenger Details */}
+            <div className="passenger-details-section">
               <PassengerDetails 
                 register={register} 
                 errors={errors} 
@@ -358,96 +358,93 @@ const PassengerPage = () => {
               />
             </div>
 
-            {/* Right Column: Contact, Coupons & Summary */}
-            <div className="passenger-col-sidebar">
-              {/* Coupon Section */}
-              <div className="coupon-card-box">
-                <div className="section-title">
-                  <Gift size={18} /> <span>Coupon Code</span>
+            {/* 2. Coupon Section (Follows down) */}
+            <div className="coupon-card-box">
+              <div className="section-title">
+                <Gift size={18} /> <span>Coupon Code</span>
+              </div>
+              
+              {!isCouponApplied ? (
+                <div className="coupon-input-group">
+                  <input
+                    type="text"
+                    {...register('couponCode')}
+                    placeholder="Enter promo coupon code (e.g. SKYADMIN2024)..."
+                    className="coupon-input"
+                  />
+                  <button 
+                    type="button" 
+                    className="coupon-apply-btn"
+                    onClick={handleApplyCoupon}
+                  >
+                    Apply
+                  </button>
                 </div>
-                
-                {!isCouponApplied ? (
-                  <div className="coupon-input-group">
-                    <input
-                      type="text"
-                      {...register('couponCode')}
-                      placeholder="Enter promo coupon..."
-                      className="coupon-input"
-                    />
-                    <button 
-                      type="button" 
-                      className="coupon-apply-btn"
-                      onClick={handleApplyCoupon}
-                    >
-                      Apply
-                    </button>
+              ) : (
+                <div className="coupon-applied">
+                  <div className="coupon-applied-info">
+                    <CheckCircle size={16} color="#16a34a" />
+                    <span>Coupon applied successfully!</span>
                   </div>
-                ) : (
-                  <div className="coupon-applied">
-                    <div className="coupon-applied-info">
-                      <CheckCircle size={16} color="#16a34a" />
-                      <span>Coupon applied successfully!</span>
-                    </div>
-                    <button 
-                      type="button" 
-                      className="coupon-remove-btn"
-                      onClick={handleRemoveCoupon}
-                    >
-                      <X size={14} /> Remove
-                    </button>
-                  </div>
-                )}
+                  <button 
+                    type="button" 
+                    className="coupon-remove-btn"
+                    onClick={handleRemoveCoupon}
+                  >
+                    <X size={14} /> Remove
+                  </button>
+                </div>
+              )}
+            </div>
+
+            {/* 3. Secure Payment Method Selector (Follows down) */}
+            <PaymentMethod register={register} errors={errors} watch={watch} />
+
+            {/* 4. Price Summary Breakdown */}
+            <div className="order-summary-card">
+              <h4 className="summary-card-title">Order Summary</h4>
+              
+              <div className="summary-item-row">
+                <span>Flight Ticket ({passengerCount} × {tripType === 'oneway' ? '$10.00' : '$12.00'}):</span>
+                <span>${totalPriceUSD.toFixed(2)} USD</span>
               </div>
 
-              {/* Payment Method Selector */}
-              <PaymentMethod register={register} errors={errors} watch={watch} />
-
-              {/* Price Summary Breakdown */}
-              <div className="order-summary-card">
-                <h4 className="summary-card-title">Order Summary</h4>
-                
-                <div className="summary-item-row">
-                  <span>Flight Ticket ({passengerCount} × {tripType === 'oneway' ? '$10.00' : '$12.00'}):</span>
-                  <span>${totalPriceUSD.toFixed(2)} USD</span>
+              {isCouponApplied && discountAmount > 0 && (
+                <div className="summary-item-row discount">
+                  <span>Coupon Discount:</span>
+                  <span>-${discountAmount.toFixed(2)} USD</span>
                 </div>
+              )}
 
-                {isCouponApplied && discountAmount > 0 && (
-                  <div className="summary-item-row discount">
-                    <span>Coupon Discount:</span>
-                    <span>-${discountAmount.toFixed(2)} USD</span>
-                  </div>
-                )}
+              <div className="summary-divider"></div>
 
-                <div className="summary-divider"></div>
-
-                <div className="summary-total-row">
-                  <div>
-                    <span className="total-label">Total to Pay</span>
-                    <span className="total-subtext">Instant IATA Verified Ticket</span>
-                  </div>
-                  <div className="total-price-block">
-                    <span className="total-usd-amount">
-                      {isAdminCoupon ? 'FREE 🎉' : `$${getFinalPriceUSD().toFixed(2)} USD`}
+              <div className="summary-total-row">
+                <div>
+                  <span className="total-label">Total to Pay</span>
+                  <span className="total-subtext">Instant IATA Verified Ticket</span>
+                </div>
+                <div className="total-price-block">
+                  <span className="total-usd-amount">
+                    {isAdminCoupon ? 'FREE 🎉' : `$${getFinalPriceUSD().toFixed(2)} USD`}
+                  </span>
+                  {!isAdminCoupon && (
+                    <span className="total-ghs-approx">
+                      (~GHS {getFinalPriceGHS().toFixed(0)})
                     </span>
-                    {!isAdminCoupon && (
-                      <span className="total-ghs-approx">
-                        (~GHS {getFinalPriceGHS().toFixed(0)})
-                      </span>
-                    )}
-                  </div>
+                  )}
                 </div>
-
-                {isCouponApplied && !isAdminCoupon && (
-                  <div className="coupon-badge-strip">
-                    <Tag size={13} /> <span>Coupon applied - {((discountAmount / totalPriceUSD) * 100).toFixed(0)}% off</span>
-                  </div>
-                )}
-                {isAdminCoupon && (
-                  <div className="coupon-badge-strip admin">
-                    <Star size={13} fill="#16a34a" /> <span>Admin coupon - 100% discount applied</span>
-                  </div>
-                )}
               </div>
+
+              {isCouponApplied && !isAdminCoupon && (
+                <div className="coupon-badge-strip">
+                  <Tag size={13} /> <span>Coupon applied - {((discountAmount / totalPriceUSD) * 100).toFixed(0)}% off</span>
+                </div>
+              )}
+              {isAdminCoupon && (
+                <div className="coupon-badge-strip admin">
+                  <Star size={13} fill="#16a34a" /> <span>Admin coupon - 100% discount applied</span>
+                </div>
+              )}
             </div>
           </div>
 
