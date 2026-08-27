@@ -1,5 +1,6 @@
 // src/pages/HomePage.jsx
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import Navbar from '../components/common/Navbar';
 import BookingForm from '../components/booking/BookingForm';
 import Footer from '../components/common/Footer';
@@ -23,6 +24,22 @@ import {
 import { ShieldCheck, Sparkles } from 'lucide-react';
 
 const HomePage = () => {
+  const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    // If user lands on homepage from Selar callback with query params
+    const email = searchParams.get('email');
+    const fullname = searchParams.get('fullname') || searchParams.get('name');
+    const pnr = searchParams.get('pnr') || searchParams.get('reference') || searchParams.get('custom_pnr') || searchParams.get('trxref');
+    const status = searchParams.get('status');
+
+    if (email || fullname || pnr || status) {
+      console.log('⚡ Detected payment callback query parameters on Home page, routing to /payment/callback');
+      navigate(`/payment/callback${window.location.search}`, { replace: true });
+    }
+  }, [searchParams, navigate]);
+
   return (
     <>
       <Navbar />

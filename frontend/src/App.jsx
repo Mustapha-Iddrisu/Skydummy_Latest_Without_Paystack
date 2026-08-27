@@ -36,10 +36,20 @@ function App() {
             <Route path="/passengers" element={<PassengerPage />} />
             <Route path="/ticket" element={<TicketPage />} />
             <Route path="/payment/callback" element={<PaymentCallbackPage />} />
+            <Route path="/payment-callback" element={<PaymentCallbackPage />} />
+            <Route path="/callback" element={<PaymentCallbackPage />} />
+            <Route path="/payment-success" element={<PaymentCallbackPage />} />
+            <Route path="/payment/success" element={<PaymentCallbackPage />} />
+            <Route path="/payment/redirect" element={<PaymentCallbackPage />} />
+            <Route path="/success" element={<PaymentCallbackPage />} />
             <Route path="/verify" element={<PnrVerificationPage />} />
+            <Route path="/verify-ticket" element={<PnrVerificationPage />} />
+            <Route path="/retrieve-ticket" element={<PnrVerificationPage />} />
             <Route path="/privacy-policy" element={<PrivacyPolicy />} />
             <Route path="/terms-conditions" element={<TermsConditions />} />
             <Route path="/refund-policy" element={<RefundPolicy />} />
+            {/* Catch-all to Ticket or Home if unknown */}
+            <Route path="*" element={<HomePage />} />
           </Routes>
         </Suspense>
       </div>

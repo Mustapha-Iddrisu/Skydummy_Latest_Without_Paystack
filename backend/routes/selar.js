@@ -128,9 +128,153 @@ router.post('/create-checkout', async (req, res) => {
 });
 
 /**
- * GET /api/selar/verify/:reference
- * Verifies transaction with Selar
+ * POST /api/selar/verify-payment
+ * Confirms with Selar API if payment has been made for a given PNR or email
  */
+router.post('/verify-payment', async (req, res) => {
+  try {
+    const { pnr, email, reference, amount, orderId, receiptRef, paymentEmail } = req.body;
+    const { apiKey, baseUrl } = getSelarConfig();
+
+    console.log('🔍 [Selar API Verify Request]:', { pnr, email, reference, orderId, receiptRef, paymentEmail, hasApiKey: Boolean(apiKey) });
+
+    const cleanPnr = (pnr || reference || '').trim().toUpperCase();
+    const lookupEmail = (paymentEmail || email || '').trim().toLowerCase();
+    const customRef = (orderId || receiptRef || '').trim();
+
+    // 1. Check in-memory session or webhook records
+    const session = cleanPnr ? PENDING_SESSIONS.get(cleanPnr) : null;
+
+    if (session && (session.status === 'paid' || session.paymentStatus === 'paid')) {
+      console.log(`✅ PNR ${cleanPnr} confirmed paid via recorded session/webhook`);
+      return res.json({
+        success: true,
+        paid: true,
+        message: 'Payment confirmed via verified session / webhook',
+        reference: cleanPnr,
+        ticketData: session.ticketData || null
+      });
+    }
+
+    // 2. If Selar API Key is present, query Selar's live API
+    if (apiKey) {
+      try {
+        let isConfirmed = false;
+        let matchedOrder = null;
+
+        // A. If specific Selar Order Reference or custom receipt ID provided, verify directly
+        const targetRefs = [customRef, reference, cleanPnr].filter(Boolean);
+        for (const targetRef of targetRefs) {
+          try {
+            const verifyRes = await axios.get(`${baseUrl}/orders/verify/${encodeURIComponent(targetRef)}`, {
+              headers: { 'Authorization': `Bearer ${apiKey}` },
+              timeout: 7000
+            });
+            const vData = verifyRes.data?.data || verifyRes.data;
+            if (vData && (vData.status === 'success' || vData.status === 'completed' || vData.payment_status === 'paid' || vData.status === 'paid')) {
+              isConfirmed = true;
+              matchedOrder = vData;
+              break;
+            }
+          } catch (refErr) {
+            // Check next reference
+          }
+        }
+
+        // B. Query recent orders from Selar API to match customer email, name, or booking reference
+        if (!isConfirmed) {
+          try {
+            const ordersRes = await axios.get(`${baseUrl}/orders`, {
+              headers: { 'Authorization': `Bearer ${apiKey}` },
+              params: { limit: 50 },
+              timeout: 8000
+            });
+
+            const orders = ordersRes.data?.data || ordersRes.data?.orders || ordersRes.data || [];
+            if (Array.isArray(orders) && orders.length > 0) {
+              const targetEmail = lookupEmail || (session?.customerEmail || '').trim().toLowerCase();
+              const targetPnr = cleanPnr;
+
+              for (const order of orders) {
+                const orderEmail = (order.customer?.email || order.customer_email || order.email || '').trim().toLowerCase();
+                const orderStatus = (order.status || order.payment_status || '').toLowerCase();
+                const isPaidStatus = orderStatus === 'success' || orderStatus === 'completed' || orderStatus === 'paid';
+                
+                // Match by Email
+                const emailMatch = targetEmail && orderEmail && (orderEmail === targetEmail);
+                
+                // Match by custom Order ID / reference
+                const orderRefMatch = customRef && (
+                  (order.reference && order.reference.toLowerCase() === customRef.toLowerCase()) ||
+                  (order.order_id && String(order.order_id) === customRef)
+                );
+
+                // Match by PNR in custom_data, description, or notes
+                const customRefData = (order.custom_data?.bookingReference || order.custom_data?.pnr || order.reference || '').toUpperCase();
+                const desc = (order.description || order.notes || order.product_name || '').toUpperCase();
+                const pnrMatch = targetPnr && (customRefData === targetPnr || desc.includes(targetPnr));
+
+                if ((emailMatch || orderRefMatch || pnrMatch) && isPaidStatus) {
+                  isConfirmed = true;
+                  matchedOrder = order;
+                  break;
+                }
+              }
+            }
+          } catch (ordersErr) {
+            console.warn('Selar orders list query warning:', ordersErr.response?.data || ordersErr.message);
+          }
+        }
+
+        if (isConfirmed) {
+          if (cleanPnr && session) {
+            session.status = 'paid';
+            session.paidAt = new Date().toISOString();
+            PENDING_SESSIONS.set(cleanPnr, session);
+          }
+          return res.json({
+            success: true,
+            paid: true,
+            message: 'Payment confirmed via Selar API',
+            reference: cleanPnr || matchedOrder?.reference,
+            order: matchedOrder
+          });
+        } else {
+          return res.json({
+            success: true,
+            paid: false,
+            apiKeyConfigured: true,
+            message: `Selar API checked successfully, but no completed order was found for ${lookupEmail || cleanPnr}. If you used a different email on Selar or received a Selar Order ID, you can verify with it below.`,
+            reference: cleanPnr
+          });
+        }
+
+      } catch (selarApiErr) {
+        console.error('Error contacting Selar API:', selarApiErr);
+        return res.status(500).json({
+          success: false,
+          paid: false,
+          message: 'Error communicating with Selar API. Please try again.'
+        });
+      }
+    }
+
+    // 3. If NO SELAR_API_KEY is configured in the environment
+    console.warn('⚠️ SELAR_API_KEY is not configured in process.env. Unable to query Selar API automatically.');
+    return res.json({
+      success: true,
+      paid: false,
+      apiKeyConfigured: false,
+      missingApiKey: true,
+      message: 'SELAR_API_KEY is not configured in your application environment. To enable automatic live Selar checks, add your Selar API Key in Settings.',
+      reference: cleanPnr
+    });
+
+  } catch (err) {
+    console.error('Verify payment route error:', err);
+    res.status(500).json({ success: false, paid: false, message: 'Server error verifying payment' });
+  }
+});
 router.get('/verify/:reference', async (req, res) => {
   try {
     const { reference } = req.params;

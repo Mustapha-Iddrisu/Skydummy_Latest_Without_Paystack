@@ -95,11 +95,11 @@ const PnrVerificationPage = () => {
     setErrorMsg('');
     setSearched(true);
 
-    const queryRef = (targetPnr || pnrInput).trim().toUpperCase();
+    const queryRef = (targetPnr || pnrInput).trim();
     const queryName = (targetLastName !== undefined ? targetLastName : lastNameInput).trim().toLowerCase();
 
     if (!queryRef) {
-      setErrorMsg('Please enter a PNR or Booking Reference');
+      setErrorMsg('Please enter a PNR Reference or Contact Email');
       return;
     }
 
@@ -107,7 +107,14 @@ const PnrVerificationPage = () => {
 
     try {
       // 1. Query Cloud Database (Firestore) for instant worldwide cross-device verification
-      const cloudTicket = await searchTicketInFirestore(queryRef, queryName);
+      const isEmailQuery = queryRef.includes('@');
+      let cloudTicket = null;
+      if (isEmailQuery) {
+        cloudTicket = await searchTicketInFirestore('', queryRef.toLowerCase());
+      } else {
+        cloudTicket = await searchTicketInFirestore(queryRef.toUpperCase(), queryName);
+      }
+
       if (cloudTicket) {
         setTicketResult(cloudTicket);
         setIsSearching(false);
@@ -128,13 +135,21 @@ const PnrVerificationPage = () => {
       console.log('Cloud / Server lookup failed, falling back to local store', err);
     }
 
-    // 2. Fallback to localStorage and hardcoded sample tickets
+    // 2. Fallback to localStorage, pending session, and sample tickets
     setTimeout(() => {
       let storedTickets = [];
       try {
+        const pending = localStorage.getItem('sky_pending_payment_ticket');
+        if (pending) {
+          storedTickets.push(JSON.parse(pending));
+        }
+      } catch (e) {}
+
+      try {
         const stored = localStorage.getItem('sky_verified_tickets');
         if (stored) {
-          storedTickets = JSON.parse(stored);
+          const parsed = JSON.parse(stored);
+          if (Array.isArray(parsed)) storedTickets.push(...parsed);
         }
       } catch (err) {
         console.error('Failed to parse stored tickets', err);
@@ -153,11 +168,14 @@ const PnrVerificationPage = () => {
       }
 
       const allTickets = [...storedTickets, ...SAMPLE_TICKETS];
+      const upperQuery = queryRef.toUpperCase();
+      const lowerQuery = queryRef.toLowerCase();
 
       const match = allTickets.find(t => {
-        const refMatch = t.bookingReference?.toUpperCase() === queryRef || 
-                         t.ticketNumber?.toUpperCase() === queryRef ||
-                         t.bookingReference?.replace('-', '')?.toUpperCase() === queryRef.replace('-', '');
+        const refMatch = t.bookingReference?.toUpperCase() === upperQuery || 
+                         t.ticketNumber?.toUpperCase() === upperQuery ||
+                         t.email?.toLowerCase() === lowerQuery ||
+                         t.bookingReference?.replace('-', '')?.toUpperCase() === upperQuery.replace('-', '');
         
         let nameMatch = true;
         if (queryName) {
@@ -173,11 +191,11 @@ const PnrVerificationPage = () => {
         setTicketResult(checkTicketExpiry(match));
       } else {
         setTicketResult(null);
-        setErrorMsg(`No active ticket found for reference "${queryRef}". Please verify the code or check your booking confirmation.`);
+        setErrorMsg(`No active ticket found for "${queryRef}". Please verify your reference or email.`);
       }
 
       setIsSearching(false);
-    }, 300);
+    }, 250);
   };
 
   const handleSearch = (e) => {

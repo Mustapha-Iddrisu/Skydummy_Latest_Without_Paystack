@@ -184,27 +184,44 @@ const useBookingStore = create(
         email: ''
       }),
       
+      setTicketData: (ticket) => {
+        const cleanTicket = deepCleanObject(ticket);
+        set({
+          ticketData: cleanTicket,
+          ticketGenerated: true,
+          error: null
+        });
+      },
+
       generateTicket: (data) => {
         console.log('Generating ticket with data:', data);
         
-        const ticketNumber = `SKY${Date.now().toString().slice(-8)}`;
-        const bookingReference = `REF${Math.random().toString(36).substring(2, 8).toUpperCase()}`;
-        const totalPrice = get().getTotal();
-        const flightDetails = get().selectedRoute || get().flightDetails;
+        const fallbackTicketNum = `SKY${Date.now().toString().slice(-8)}`;
+        const fallbackBookingRef = `REF${Math.random().toString(36).substring(2, 8).toUpperCase()}`;
         
-        const tripType = data.tripType || get().tripType || 'oneway';
+        const ticketNumber = data.ticketNumber || fallbackTicketNum;
+        const bookingReference = data.bookingReference || fallbackBookingRef;
+        const flightDetails = data.flightDetails || get().selectedRoute || get().flightDetails;
+        
+        const tripType = data.tripType || get().tripType || 'round';
+        const passengerCount = data.passengers || data.passengerCount || get().passengers || 1;
+        const basePrice = tripType === 'oneway' ? PRICES.oneWay : PRICES.roundTrip;
+        const calculatedTotal = basePrice * passengerCount;
+
+        const formattedTotalPrice = data.totalPrice || (data.finalPrice !== undefined ? `$${Number(data.finalPrice).toFixed(2)} USD` : `$${calculatedTotal.toFixed(2)} USD`);
         
         const now = new Date();
-        const createdAt = now.toISOString();
-        const issueDate = now.toISOString().split('T')[0];
-        const VALIDITY_DAYS = 14;
-        const expiresAtDate = new Date(now.getTime() + VALIDITY_DAYS * 24 * 60 * 60 * 1000);
+        const createdAt = data.createdAt || now.toISOString();
+        const issueDate = data.issueDate || now.toISOString().split('T')[0];
+        const VALIDITY_DAYS = data.validityDays || 14;
+        const expiresAtDate = data.expiresAt ? new Date(data.expiresAt) : new Date(now.getTime() + VALIDITY_DAYS * 24 * 60 * 60 * 1000);
         const expiresAt = expiresAtDate.toISOString();
-        const expiryDate = expiresAtDate.toISOString().split('T')[0];
+        const expiryDate = data.expiryDate || expiresAtDate.toISOString().split('T')[0];
 
         const rawTicketData = {
           ...data,
           tripType: tripType,
+          passengers: passengerCount,
           ticketNumber,
           bookingReference,
           createdAt,
@@ -212,25 +229,27 @@ const useBookingStore = create(
           expiryDate,
           expiresAt,
           validityDays: VALIDITY_DAYS,
-          status: 'confirmed',
-          totalPrice: `$${totalPrice.toFixed(2)} USD`,
+          status: data.status || 'confirmed',
+          paymentStatus: data.paymentStatus || 'paid',
+          totalPrice: formattedTotalPrice,
           flightDetails: flightDetails || null,
-          priceBreakdown: {
-            basePrice: data.tripType === 'oneway' ? PRICES.oneWay : PRICES.roundTrip,
-            passengers: data.passengers,
-            total: totalPrice,
+          priceBreakdown: data.priceBreakdown || {
+            basePrice: basePrice,
+            passengers: passengerCount,
+            total: data.finalPrice !== undefined ? data.finalPrice : calculatedTotal,
             currency: 'USD'
           }
         };
 
         const ticketData = deepCleanObject(rawTicketData) || rawTicketData;
         
-        console.log('Ticket data generated:', ticketData);
+        console.log('Ticket data generated and stored:', ticketData);
 
         try {
           const existing = JSON.parse(localStorage.getItem('sky_verified_tickets') || '[]');
-          existing.unshift(ticketData);
-          localStorage.setItem('sky_verified_tickets', JSON.stringify(existing.slice(0, 50)));
+          const filtered = existing.filter(t => t.bookingReference !== ticketData.bookingReference);
+          filtered.unshift(ticketData);
+          localStorage.setItem('sky_verified_tickets', JSON.stringify(filtered.slice(0, 50)));
         } catch (err) {
           console.error('Failed to save to sky_verified_tickets:', err);
         }
@@ -250,6 +269,8 @@ const useBookingStore = create(
         set({
           ticketGenerated: true,
           ticketData: ticketData,
+          selectedRoute: flightDetails || null,
+          flightDetails: flightDetails || null,
           error: null
         });
       },
@@ -272,7 +293,11 @@ const useBookingStore = create(
         passport: typeof state.passport === 'string' ? state.passport : '',
         email: typeof state.email === 'string' ? state.email : '',
         paymentMethod: typeof state.paymentMethod === 'string' ? state.paymentMethod : 'credit',
-        keepDataAfterSubmission: Boolean(state.keepDataAfterSubmission)
+        keepDataAfterSubmission: Boolean(state.keepDataAfterSubmission),
+        ticketGenerated: Boolean(state.ticketGenerated),
+        ticketData: state.ticketData ? deepCleanObject(state.ticketData) : null,
+        selectedRoute: state.selectedRoute ? deepCleanObject(state.selectedRoute) : null,
+        flightDetails: state.flightDetails ? deepCleanObject(state.flightDetails) : null
       })
     }
   )
